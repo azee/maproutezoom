@@ -1,6 +1,8 @@
-package com.whatsapp.map.utils;
+package com.whatsapp.map;
 
 import com.whatsapp.map.beans.Point;
+import com.whatsapp.map.utils.Approximation;
+import com.whatsapp.map.utils.PointListMatcher;
 import org.junit.Test;
 
 import java.util.ArrayList;

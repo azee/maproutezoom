@@ -12,7 +12,7 @@ import java.util.List;
 public class PointListMatcher extends BaseMatcher {
     List<Point> points;
 
-    PointListMatcher(List<Point> points) {
+    public PointListMatcher(List<Point> points) {
         this.points = points;
     }
 
