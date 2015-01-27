@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Created by azee on 27.01.15.
+ * In real world it is better to use something like ApacheCommons Math;
  */
 public class Approximation {
 
@@ -134,13 +135,28 @@ public class Approximation {
     }
 
 
-
+    /**
+     * If points are on the same line with threshold tolerance
+     * @param base
+     * @param neighbour
+     * @param sinus
+     * @param threshold
+     * @return
+     */
     private static boolean isOnLine(Point base, Point neighbour, double sinus, Double threshold){
         double maxSinus = getSinus(base, neighbour, 0, threshold);
         double minSinus = getSinus(base, neighbour, threshold, 0);
         return sinus >= minSinus && sinus <= maxSinus;
     }
 
+    /**
+     * Get the sinus value of an angle
+     * @param one
+     * @param two
+     * @param xThreshold
+     * @param yThreshold
+     * @return
+     */
     private static double getSinus(Point one, Point two, double xThreshold, double yThreshold){
         double xGradient = Math.abs(two.getX() - one.getX()) + xThreshold;
         double yGradient = Math.abs(two.getY() - one.getY()) + yThreshold;
@@ -148,6 +164,11 @@ public class Approximation {
         return hypotenuse == 0 ? 0 : yGradient/hypotenuse;
     }
 
+    /**
+     * Get only extreme points from the list - reduce internal
+     * @param input
+     * @return
+     */
     private static List<Point> getExtremes(List<Point> input){
         if (input.size() <= 2){
             return input;
