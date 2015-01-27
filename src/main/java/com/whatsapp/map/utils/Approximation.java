@@ -35,7 +35,9 @@ public class Approximation {
             //Iterate through points that are in the threshold area of the base one
             //If there are no points to collapse - only base will be added to the list
             while (i < input.size() && isInThreshold(base, input.get(i), threshold)){
-                toCollapse.add(input.get(i++));
+//                toCollapse.add(input.get(i++));
+                toCollapse.add(new Point(input.get(i).getX(), input.get(i).getY()));
+                i++;
             }
 
             //Get the mean point of selected points to collapse
