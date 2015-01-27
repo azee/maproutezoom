@@ -5,7 +5,6 @@ import com.whatsapp.map.utils.Approximation;
 import com.whatsapp.map.utils.PointListMatcher;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 

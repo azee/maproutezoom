@@ -16,7 +16,7 @@ public class Approximation {
     }
 
     /**
-     * Reduce closely placed points that will collapse in zoom out
+     * Reduce closely placed points that will collapse while zoom out
      * @param input
      * @param threshold - Threshold is a radius of the circle around one point
      * so that after zooming out this circle area could be displayed as a single point
@@ -28,7 +28,7 @@ public class Approximation {
         }
 
         List<Point> reduced = new LinkedList<Point>();
-        //Iterate through all elements in array
+        //Iterate through all elements in the list
         for (int i = 0; i < input.size(); i++){
 
             //Collect points that might collapse
@@ -74,7 +74,7 @@ public class Approximation {
             //Calculate current absolute angle sinus
             double sinus = 0;
 
-            //Add to collapse collection if points lie on one line with threshold tolerance
+            //Add to collapse collection if points lie on one same line with threshold tolerance
             while (i < input.size() &&
                     (isOnLine(base, input.get(i), sinus, threshold) ||
                             toCollapse.size() < 2)){
