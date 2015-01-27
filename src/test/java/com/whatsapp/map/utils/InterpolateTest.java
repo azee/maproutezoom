@@ -26,7 +26,7 @@ public class InterpolateTest {
         expexted.add(new Point(3, 3));
         expexted.add(new Point(5, 7));
 
-        List<Point> result = Approximation.interpolate(input, 1);
+        List<Point> result = Approximation.interpolate(input, 0);
         assertThat(result, new PointListMatcher(expexted));
     }
 
@@ -46,7 +46,7 @@ public class InterpolateTest {
         expexted.add(new Point(4, 1));
         expexted.add(new Point(4, 3));
 
-        List<Point> result = Approximation.interpolate(input, 1);
+        List<Point> result = Approximation.interpolate(input, 0);
         assertThat(result, new PointListMatcher(expexted));
     }
 
@@ -65,6 +65,46 @@ public class InterpolateTest {
         expexted.add(new Point(0, 3));
         expexted.add(new Point(1, 1));
         expexted.add(new Point(1, 3));
+
+        List<Point> result = Approximation.interpolate(input, 0);
+        assertThat(result, new PointListMatcher(expexted));
+    }
+
+    @Test
+    public void interpolateWithThreshold(){
+        List<Point> input = new LinkedList<Point>();
+        input.add(new Point(1, 1));
+        input.add(new Point(3, 3));
+        input.add(new Point(5.5, 5.5));
+        input.add(new Point(9, 12));
+
+        List<Point> expexted = new LinkedList<Point>();
+        expexted.add(new Point(1, 1));
+        expexted.add(new Point(5.5, 5.5));
+        expexted.add(new Point(9, 12));
+
+        List<Point> result = Approximation.interpolate(input, 1);
+        assertThat(result, new PointListMatcher(expexted));
+    }
+
+
+    @Test
+    public void interpolateWithThresholdSides(){
+        List<Point> input = new LinkedList<Point>();
+        input.add(new Point(1, 1));
+        input.add(new Point(3, 3));
+        input.add(new Point(5.5, 5.5));
+        input.add(new Point(6, 5.9));
+        input.add(new Point(9, 12));
+        input.add(new Point(11, 17));
+        input.add(new Point(15, 27));
+        input.add(new Point(17, 32));
+
+        List<Point> expexted = new LinkedList<Point>();
+        expexted.add(new Point(1, 1));
+        expexted.add(new Point(6, 5.9));
+        expexted.add(new Point(9, 12));
+        expexted.add(new Point(17, 32));
 
         List<Point> result = Approximation.interpolate(input, 1);
         assertThat(result, new PointListMatcher(expexted));

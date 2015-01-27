@@ -10,6 +10,10 @@ import java.util.List;
  */
 public class Approximation {
 
+    public static List<Point> zoomOut(List<Point> input, double threshold){
+        return interpolate(reduceThresholdDestination(input, threshold), threshold);
+    }
+
     /**
      * Reduce closely placed points that will collapse in zoom out
      * @param input
@@ -66,14 +70,18 @@ public class Approximation {
             //Take a base point to compare with
             Point base = input.get(i);
 
+            //Calculate current absolute angle sinus
             double sinus = 0;
 
+            //Add to collapse collection if points lie on one line with threshold tolerance
             while (i < input.size() &&
                     (isOnLine(base, input.get(i), sinus, threshold) ||
                             toCollapse.size() < 2)){
                 sinus = getSinus(base, input.get(i), 0, 0);
                 toCollapse.add(input.get(i++));
             }
+
+            //Reduce the list by selecting only extreme points
             reduced.addAll(getExtremes(toCollapse));
 
             //All points to collapse are collected. Next iteration will increase i
@@ -127,27 +135,17 @@ public class Approximation {
 
 
 
-//    private static boolean isOnLine(Point base, Point neighbour, double oldSinus, Double threshold){
-//        double maxSinus = getSinus(base, neighbour, 0, threshold);
-//        double minSinus = getSinus(base, neighbour, threshold, 0);
-//
-//        double currentSinus = getSinus(base, neighbour, 0, 0);
-//
-//
-//        return sinus >= minSinus && sinus <= maxSinus;
-//
-//
-//    }
-
-    private static boolean isOnLine(Point base, Point neighbour, double oldSinus, Double threshold){
-        return oldSinus == getSinus(base, neighbour, 0, 0);
+    private static boolean isOnLine(Point base, Point neighbour, double sinus, Double threshold){
+        double maxSinus = getSinus(base, neighbour, 0, threshold);
+        double minSinus = getSinus(base, neighbour, threshold, 0);
+        return sinus >= minSinus && sinus <= maxSinus;
     }
 
     private static double getSinus(Point one, Point two, double xThreshold, double yThreshold){
         double xGradient = Math.abs(two.getX() - one.getX()) + xThreshold;
         double yGradient = Math.abs(two.getY() - one.getY()) + yThreshold;
         double hypotenuse = Math.sqrt(Math.pow(xGradient, 2) + Math.pow(yGradient, 2));
-        return hypotenuse == 0 ? 0 : xGradient/hypotenuse;
+        return hypotenuse == 0 ? 0 : yGradient/hypotenuse;
     }
 
     private static List<Point> getExtremes(List<Point> input){
