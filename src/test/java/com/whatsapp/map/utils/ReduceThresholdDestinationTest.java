@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by azee on 27.01.15.
  */
-public class ApproximationTest {
+public class ReduceThresholdDestinationTest {
     @Test
     public void reduceThresholdDestinationAllInTest(){
         List<Point> input = new LinkedList<Point>();

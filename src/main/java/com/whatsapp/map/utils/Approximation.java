@@ -17,13 +17,13 @@ public class Approximation {
      * so that after zooming out this circle area could be displayed as a single point
      * @return
      */
-    public static List<Point> reduceThresholdDestination(List<Point> input, float threshold){
+    public static List<Point> reduceThresholdDestination(List<Point> input, double threshold){
         if (input.size() == 1){
             return input;
         }
 
         List<Point> reduced = new LinkedList<Point>();
-        //Iterate through all elemenst in array
+        //Iterate through all elements in array
         for (int i = 0; i < input.size(); i++){
 
             //Collect points that might collapse
@@ -35,9 +35,7 @@ public class Approximation {
             //Iterate through points that are in the threshold area of the base one
             //If there are no points to collapse - only base will be added to the list
             while (i < input.size() && isInThreshold(base, input.get(i), threshold)){
-//                toCollapse.add(input.get(i++));
-                toCollapse.add(new Point(input.get(i).getX(), input.get(i).getY()));
-                i++;
+                toCollapse.add(input.get(i++));
             }
 
             //Get the mean point of selected points to collapse
@@ -56,8 +54,34 @@ public class Approximation {
      * @param input
      * @return
      */
-    public static List<Double> reduceStraightLines(List<Double> input){
-        return null;
+    public static List<Point> interpolate(List<Point> input, double threshold){
+        if (input.size() <= 2){
+            return input;
+        }
+
+        List<Point> reduced = new LinkedList<Point>();
+        for (int i = 0; i < input.size(); i++){
+            List<Point> toCollapse = new LinkedList<Point>();
+
+            //Take a base point to compare with
+            Point base = input.get(i);
+
+            double sinus = 0;
+
+            while (i < input.size() &&
+                    (isOnLine(base, input.get(i), sinus, threshold) ||
+                            toCollapse.size() < 2)){
+                sinus = getSinus(base, input.get(i), 0, 0);
+                toCollapse.add(input.get(i++));
+            }
+            reduced.addAll(getExtremes(toCollapse));
+
+            //All points to collapse are collected. Next iteration will increase i
+            //so we have to move pointer one step back
+            i--;
+        }
+        return reduced;
+
     }
 
     /**
@@ -67,7 +91,7 @@ public class Approximation {
      * @param threshold
      * @return
      */
-    private static  boolean isInThreshold(Point bsase, Point neighbor, float threshold){
+    private static  boolean isInThreshold(Point bsase, Point neighbor, Double threshold){
         return distance(bsase, neighbor) <= threshold;
     }
 
@@ -99,5 +123,40 @@ public class Approximation {
             y += point.getY();
         }
         return new Point(x/points.size(), y/points.size());
+    }
+
+
+
+//    private static boolean isOnLine(Point base, Point neighbour, double oldSinus, Double threshold){
+//        double maxSinus = getSinus(base, neighbour, 0, threshold);
+//        double minSinus = getSinus(base, neighbour, threshold, 0);
+//
+//        double currentSinus = getSinus(base, neighbour, 0, 0);
+//
+//
+//        return sinus >= minSinus && sinus <= maxSinus;
+//
+//
+//    }
+
+    private static boolean isOnLine(Point base, Point neighbour, double oldSinus, Double threshold){
+        return oldSinus == getSinus(base, neighbour, 0, 0);
+    }
+
+    private static double getSinus(Point one, Point two, double xThreshold, double yThreshold){
+        double xGradient = Math.abs(two.getX() - one.getX()) + xThreshold;
+        double yGradient = Math.abs(two.getY() - one.getY()) + yThreshold;
+        double hypotenuse = Math.sqrt(Math.pow(xGradient, 2) + Math.pow(yGradient, 2));
+        return hypotenuse == 0 ? 0 : xGradient/hypotenuse;
+    }
+
+    private static List<Point> getExtremes(List<Point> input){
+        if (input.size() <= 2){
+            return input;
+        }
+        List<Point> result = new LinkedList<Point>();
+        result.add(input.get(0));
+        result.add(input.get(input.size() - 1));
+        return result;
     }
 }
