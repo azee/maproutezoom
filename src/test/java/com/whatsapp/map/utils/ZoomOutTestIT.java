@@ -36,6 +36,26 @@ public class ZoomOutTestIT {
         assertThat(result, new PointListMatcher(expexted));
     }
 
+    @Test
+    public void zoomOutReversePointsTest(){
+        List<Point> input = new LinkedList<Point>();
+        input.add(new Point(17, 32));
+        input.add(new Point(15, 27));
+        input.add(new Point(11, 17));
+        input.add(new Point(9, 12));
+        input.add(new Point(6, 5.9));
+        input.add(new Point(5.5, 5.5));
+        input.add(new Point(3, 3));
+        input.add(new Point(1.3, 1.5));
+        input.add(new Point(1, 1));
 
+        List<Point> expexted = new LinkedList<Point>();
+        expexted.add(new Point(17, 32));
+        expexted.add(new Point(9, 12));
+        expexted.add(new Point(5.75, 5.7));
+        expexted.add(new Point(1.15, 1.25));
 
+        List<Point> result = Approximation.zoomOut(input, 1);
+        assertThat(result, new PointListMatcher(expexted));
+    }
 }
